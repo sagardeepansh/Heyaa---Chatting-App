@@ -17,7 +17,7 @@ export default function Homee() {
     }
   }, [router]);
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated) {  
     return <div>Loading...</div>;
   }
 
