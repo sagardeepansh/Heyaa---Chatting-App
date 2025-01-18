@@ -1,25 +1,25 @@
-// src/app/api/login/route.js
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-export async function hashPassword(password) {
-  const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
-  return hashedPassword;
-}
-
+import clientPromise, { databaseName } from '../../../utils/mongodb';
 
 export async function POST(req) {
   const { email, password } = await req.json();
-  const hashedPassword = await hashPassword(password);
 
-  // Dummy data for example (replace with database check)
-  const user = {
-    email: 'admin@gmail.com',
-    password: '$2a$10$WhuAbay63/bxC8yw4XbGjOvIb24g5CWGUJ0pCL22tw8rPNza9PWBK', // Hashed password
-  };
+  const client = await clientPromise;
+  const db = client.db(databaseName);
+  const usersCollection = db.collection('users');
 
-  if (email === user.email && bcrypt.compare(hashedPassword, user.password)) {
+  // Fetch the user from the database
+  const user = await usersCollection.findOne({ email });
+
+  if (!user) {
+    return new Response(JSON.stringify({ status: 'error', message: 'User does not exist' }), { status: 409 });
+  }
+
+  // Compare the provided password with the stored hashed password
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (isPasswordValid) {
     const token = jwt.sign({ email: user.email }, 'your-secret-key', { expiresIn: '1h' });
     return new Response(JSON.stringify({ token }), { status: 200 });
   } else {

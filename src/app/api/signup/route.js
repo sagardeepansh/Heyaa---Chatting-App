@@ -1,20 +1,41 @@
-// src/app/api/signup/route.js
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import clientPromise, { databaseName } from '../../../utils/mongodb';
+
+const SALT_ROUNDS = 10;
+
+async function hashPassword(password) {
+  return bcrypt.hash(password, SALT_ROUNDS);
+}
 
 export async function POST(req) {
-  const { email, password } = await req.json();
+  try {
+    let { email, password } = await req.json();
 
-  // Dummy data for example (replace with database check)
-  const user = {
-    email: 'user@example.com',
-    password: '$2a$10$QwQkFZG1EBhxR7eTggS5eeLhZa6rSdyk4JDi2lDJZg/BuHrtc9PQa', // Hashed password
-  };
+    if (!email || !password) {
+      return jsonResponse(400, { status: 'error', message: 'Email and password are required' });
+    }
 
-  if (email === user.email && bcrypt.compareSync(password, user.password)) {
-    const token = jwt.sign({ email: user.email }, 'your-secret-key', { expiresIn: '1h' });
-    return new Response(JSON.stringify({ token }), { status: 200 });
-  } else {
-    return new Response(JSON.stringify({ message: 'Invalid credentials' }), { status: 401 });
+    const client = await clientPromise;
+    const db = client.db(databaseName);
+    const usersCollection = db.collection('users');
+
+    if (await usersCollection.findOne({ email })) {
+      return jsonResponse(409, { status: 'error', message: 'User already exists' });
+    }
+
+    password = await hashPassword(password);
+    const { insertedId } = await usersCollection.insertOne({ email, password });
+
+    return jsonResponse(201, { status: 'success', message: 'User created successfully', userId: insertedId });
+  } catch (error) {
+    console.error('Signup Error:', error);
+    return jsonResponse(500, { status: 'error', message: 'Internal Server Error' });
   }
+}
+
+function jsonResponse(status, body) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
 }

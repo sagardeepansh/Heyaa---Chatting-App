@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import SignupForm from '@/components/SignupForm';
 import styles from '@/styles/signup.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function Signup() {
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSignup = async (email, password) => {
     const response = await fetch('/api/signup', {
@@ -14,10 +16,13 @@ export default function Signup() {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await response.json();
+    const data = await response;
+
+    console.log("", data);
 
     if (response.ok) {
-      window.location.href = '/auth/login'; // Redirect to login page after successful signup
+      router.push('/auth/login'); 
+      // window.location.href = '/auth/login'; // Redirect to login page after successful signup
     } else {
       setError(data.message || 'Signup failed');
     }
