@@ -20,7 +20,7 @@ export async function POST(req) {
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (isPasswordValid) {
-    const token = jwt.sign({ email: user.email }, 'your-secret-key', { expiresIn: '1h' });
+    const token = jwt.sign({ email: user.email, _id: user._id }, 'your-secret-key', { expiresIn: '1h' });
     return new Response(JSON.stringify({ token }), { status: 200 });
   } else {
     return new Response(JSON.stringify({ message: 'Invalid credentials' }), { status: 401 });
