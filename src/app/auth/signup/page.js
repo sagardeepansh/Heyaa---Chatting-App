@@ -9,11 +9,11 @@ export default function Signup() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleSignup = async (email, password) => {
+  const handleSignup = async (fullname, email, password) => {
     const response = await fetch('/api/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ fullname, email, password }),
     });
 
     const data = await response;

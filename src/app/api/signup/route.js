@@ -9,7 +9,7 @@ async function hashPassword(password) {
 
 export async function POST(req) {
   try {
-    let { email, password } = await req.json();
+    let {fullname, email, password } = await req.json();
 
     if (!email || !password) {
       return jsonResponse(400, { status: 'error', message: 'Email and password are required' });
@@ -24,7 +24,7 @@ export async function POST(req) {
     }
 
     password = await hashPassword(password);
-    const { insertedId } = await usersCollection.insertOne({ email, password });
+    const { insertedId } = await usersCollection.insertOne({fullname, email, password });
 
     return jsonResponse(201, { status: 'success', message: 'User created successfully', userId: insertedId });
   } catch (error) {

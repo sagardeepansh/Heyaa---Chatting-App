@@ -7,85 +7,7 @@ import jwt from 'jsonwebtoken';
 
 
 export default function Dashboard() {
-  const decoded = jwt.decode(localStorage.getItem('token'));
-  const [chatMessage, setChatMessage] = useState('adsd');
-  const [message, setMessage] = useState('');
-  const [socket, setSocket] = useState(null);
-  
-  // const chatId = `${decoded?._id}:12345`;
-  const userId = decoded?._id;
-  const chatId = `678bb13f799043ed8be4f4b3:67b060820307b6df76c8d6b2`;
-  const { messages, addMessage, deleteMessage, loading } = useIndexedDB(chatId);
-  const [input, setInput] = useState("");
-
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault(); // Prevents adding a new line in the textarea
-      handleSendMessage();
-    }
-  };
-
-  const handleSendMessage = () => {
-    if (input.trim()) {
-      addMessage({
-        chatId,
-        userId,
-        content: input,
-        timestamp: new Date().toISOString(),
-      });
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        // ws.send();
-        socket.send(JSON.stringify({ chatId, userId, sender: decoded?.name, text: input, timestamp: new Date().toISOString() })); // Send the message to the server
-      }
-      setInput("");
-    }
-  };
-
  
-  
-
-  useEffect(() => {
-    const ws = new WebSocket(`ws://192.168.1.23:8080/?chatId=${chatId}`);
-
-    ws.onopen = () => {
-      console.log('Connected to chat:', chatId);
-      setSocket(ws);
-    };
-
-    ws.onmessage = (event) => {
-      setMessage(event.data);
-      // console.log(event.data);
-      const parsedData = JSON.parse(event.data);
-      addMessage({
-        chatId:parsedData?.chatId,
-        userId:parsedData?.userId,
-        content:parsedData?.text,
-        content:parsedData?.text,
-        timestamp:parsedData?.timestamp,
-        sender: parsedData?.sender,
-      });
-      console.log(parsedData);
-      console.log(typeof parsedData)
-    };
-
-    ws.onclose = () => {
-      console.log('WebSocket connection closed');
-      ws.onopen = () => {
-        console.log('Connected to chat:', chatId);
-        setSocket(ws);
-      };
-    };
-
-    ws.onerror = (error) => {
-      console.log('WebSocket error:', error);
-    };
-
-    return () => {
-      if (ws) {
-        ws.close();
-      }
-    };
-  }, [chatId]);
 
   return (
     <>
@@ -151,7 +73,7 @@ export default function Dashboard() {
                         </button>
                       </div>
                     ))} */}
-                    <ChatBox messages={messages} onDelete={deleteMessage} />
+                    {/* <ChatBox messages={messages} onDelete={deleteMessage} /> */}
                     {/* <div className="mb-4 text-right">
                       <div className="text-sm text-gray-500">You</div>
                       <div className="inline-block bg-purple-700 text-white rounded-lg p-2 mt-1">
