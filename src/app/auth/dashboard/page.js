@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useIndexedDB } from "@/hooks/useIndexedDB";
 import ChatBox from "@/components/ChatBox";
 import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
 import jwt from 'jsonwebtoken';
 
 
@@ -109,22 +110,7 @@ export default function Dashboard() {
           <div className="md:container md:mx-auto">
             <div className="grid grid-cols-12 gap-4">
               <div className="md:col-span-3 bg-gray-100 p-2	rounded-2xl ">
-                <nav >
-                  <ul className="flex flex-col space-y-2 p-4">
-                    <li>
-                      <a href="#" className="block p-3 rounded-md text-xl font-semibold	 text-gray-700 hover:bg-gray-200">Home</a>
-                    </li>
-                    <li>
-                      <a href="#" className="block p-3 rounded-md text-xl font-semibold	 text-white bg-purple-700">My Friends</a>
-                    </li>
-                    <li>
-                      <a href="#" className="block p-3 rounded-md text-xl font-semibold	 text-gray-700 hover:bg-gray-200">Chats</a>
-                    </li>
-                    <li>
-                      <a href="#" className="block p-3 rounded-md text-xl font-semibold	 text-gray-700 hover:bg-gray-200">Help</a>
-                    </li>
-                  </ul>
-                </nav>
+                 <Sidebar />
               </div>
               <div className="md:col-span-9 bg-gray-100 p-8	rounded-2xl ">
                 <div style={{ minHeight: "500px" }} className="flex flex-col h-dvh	max-h-96 rounded-2xl">

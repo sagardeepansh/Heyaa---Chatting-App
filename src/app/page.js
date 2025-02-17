@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Dashboard from '@/app/auth/dashboard/page';
+import Friendslist from '@/app/auth/friendslist/page';
 
 export default function Homee() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,6 +10,7 @@ export default function Homee() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log("tokentokentoken", token);
     if (token) {
       setIsAuthenticated(true);
     } else {
@@ -22,7 +23,7 @@ export default function Homee() {
   }
 
   return (
-    <Dashboard />
+    <Friendslist />
     // <div style={{ padding: '20px' }}>
     //   <h1>Welcome to the App!</h1>
     //   <p>You are successfully logged in.</p>
