@@ -70,7 +70,7 @@ export default function Dashboard() {
     };
 
     ws.onclose = () => {
-      console.log('WebSocket connection closed');
+      // console.log('WebSocket connection closed');
       ws.onopen = () => {
         console.log('Connected to chat:', chatId);
         setSocket(ws);
@@ -78,7 +78,7 @@ export default function Dashboard() {
     };
 
     ws.onerror = (error) => {
-      console.log('WebSocket error:', error);
+      // console.log('WebSocket error:', error);
     };
 
     return () => {

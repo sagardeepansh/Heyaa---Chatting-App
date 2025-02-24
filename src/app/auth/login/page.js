@@ -22,9 +22,8 @@ export default function Login() {
     if (response.ok) {
       localStorage.setItem('token', data.token); // Store token
       document.cookie = `token=${data.token}; path=/; Secure; HttpOnly`;
-      console.log("sss", data.token);
       // window.location.href = '/'; // Redirect to home or dashboard
-      router.push('/'); 
+      router.push('/auth/friendslist'); 
     } else {
       setError(data.message || 'Login failed');
     }

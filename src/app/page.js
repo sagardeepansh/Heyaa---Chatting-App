@@ -10,7 +10,6 @@ export default function Homee() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log("tokentokentoken", token);
     if (token) {
       setIsAuthenticated(true);
     } else {

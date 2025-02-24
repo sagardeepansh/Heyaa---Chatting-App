@@ -2,6 +2,8 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
+import { NextResponse } from 'next/server';
+
 
 export default function Header({ messages}) {
     
@@ -30,8 +32,21 @@ export default function Header({ messages}) {
     
       const router = useRouter();
     
-      const handleLogout = () => {
+      const handleLogout = async () => {
         localStorage.removeItem('token');
+        const response = await fetch('/api/logout', {
+          method: 'GET',
+          credentials: 'same-origin', // Ensure cookies are sent along with the request
+        });
+
+        console.log("response",response)
+        if (response.status===200) {
+          // Redirect to login page after successful logout
+          window.location.href = '/auth/login';
+        } else {
+          // Handle error
+          alert('Failed to log out');
+        }
       };
     
     return (

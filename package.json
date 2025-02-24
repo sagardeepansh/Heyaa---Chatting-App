@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev", 
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "websocket": "node server.js" 
+    "websocket": "node server.js"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "bcryptjs": "^2.4.3",
+    "cookie": "^1.0.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.12.0",
     "next": "^15.1.4",

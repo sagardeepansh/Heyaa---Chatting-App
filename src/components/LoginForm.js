@@ -1,6 +1,7 @@
 // src/components/LoginForm.js
 // 'use client';
 import { useState } from 'react';
+import Link from 'next/link'
 
 export default function LoginForm({ onLogin, error }) {
   const [email, setEmail] = useState('');
@@ -51,7 +52,17 @@ export default function LoginForm({ onLogin, error }) {
           </form>
 
           <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Not a member?
+          <Link
+                          href={`/auth/signup`}
+                          // onClick={(e) => {
+                          //   if (item.name == "Sign out") {
+                          //     handleLogout()
+                          //   }
+                          // }}
+                          className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          Not a member?
+                        </Link>
             {/* <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a> */}
           </p>
         </div>

@@ -10,7 +10,7 @@ const options = {
 let client;
 let clientPromise;
 
-console.log("uri===>", uri);
+// console.log("uri===>", uri);
 
 if (!uri || !dbName) {
   throw new Error('Please add your MongoDB URI and DB name to the environment variables.');

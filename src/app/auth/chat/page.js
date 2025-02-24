@@ -58,15 +58,16 @@ export default function chat() {
 
     const handleSendMessage = () => {
         if (input.trim()) {
-            addMessage({
-                chatId,
-                userId,
-                content: input,
-                timestamp: new Date().toISOString(),
-            });
+            
             if (socket && socket.readyState === WebSocket.OPEN) {
                 // ws.send();
                 socket.send(JSON.stringify({ chatId, userId, sender: decoded?.name, text: input, timestamp: new Date().toISOString() })); // Send the message to the server
+                addMessage({
+                    chatId,
+                    userId,
+                    content: input,
+                    timestamp: new Date().toISOString(),
+                });
             }
             setInput("");
         }
@@ -85,37 +86,36 @@ export default function chat() {
 
     useEffect(() => {
         const connectWebSocket = () => {
-            const ws = new WebSocket(`ws://192.168.1.23:8080/?chatId=${chatId}`);
+            const ws = new WebSocket(`ws://localhost:8080/?chatId=${chatId}`);
     
             ws.onopen = () => {
-                console.log('Connected to chat:', chatId);
                 setSocket(ws);
+                ws.send(JSON.stringify({ chatId, userId, sender: "system", text: "Connected", timestamp: new Date().toISOString() }));
             };
     
             ws.onmessage = (event) => {
                 setMessage(event.data);
                 const parsedData = JSON.parse(event.data);
-                addMessage({
-                    chatId: parsedData?.chatId,
-                    userId: parsedData?.userId,
-                    content: parsedData?.text,
-                    timestamp: parsedData?.timestamp,
-                    sender: parsedData?.sender,
-                });
-                console.log(parsedData);
+                if(parsedData?.userId != userId){
+                    addMessage({
+                        chatId: parsedData?.chatId,
+                        userId: parsedData?.userId,
+                        content: parsedData?.text,
+                        timestamp: parsedData?.timestamp,
+                        sender: parsedData?.sender,
+                    });
+                }
             };
     
             ws.onclose = () => {
-                console.log('WebSocket connection closed. Reconnecting...');
                 setTimeout(() => {
                     if (userId && friendId) {
-                        connectWebSocket(); // Reconnect after 2 seconds
+                        // connectWebSocket(); // Reconnect after 2 seconds
                     }
                 }, 2000);
             };
     
             ws.onerror = (error) => {
-                console.log('WebSocket error:', error);
                 ws.close(); // Close the WebSocket in case of error to trigger onclose and attempt reconnection
             };
     
@@ -124,12 +124,14 @@ export default function chat() {
     
         const ws = connectWebSocket();
     
+        // Cleanup function: This will be called when the component is unmounted or when the chatId changes.
         return () => {
             if (ws) {
                 ws.close();
             }
         };
     }, [chatId]);
+    
 
 
 

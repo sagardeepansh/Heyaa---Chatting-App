@@ -30,9 +30,9 @@ export default function Signup() {
 
   return (
     <div className={styles.container}>
-      <h1>Signup</h1>
-      {error && <p className={styles.error}>{error}</p>}
-      <SignupForm onSignup={handleSignup} />
+      {/* <h1>Signup</h1> */}
+      {/* {error && <p className={styles.error}>{error}</p>} */}
+      <SignupForm onSignup={handleSignup} error={error}  />
     </div>
   );
 }

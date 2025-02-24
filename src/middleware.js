@@ -2,17 +2,13 @@ import { NextResponse } from 'next/server';
 
 export function middleware(req) {
   const token = req.cookies.get('token');
+  const url = req.nextUrl.clone();
 
-  // console.log("----------------------", token);
-  const { pathname } = req.nextUrl;
+  // console.log("----------->",token)
 
-  // Allow access to the login page without a token
-  if (pathname === '/auth/login') {
-    return NextResponse.next();
-  }
-
-  // Redirect to login if no token is found
-  if (!token) {
+  // Check if the requested route is not the login page and the user is not authenticated
+  if (!token && url.pathname !== '/auth/login' && url.pathname !== '/auth/signup') {
+    // Redirect to login if no token and not on the login page
     return NextResponse.redirect(new URL('/auth/login', req.url));
   }
 
@@ -20,5 +16,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'], // Protect all routes except specified ones
+  matcher: ['/auth/:path*'], // Protect all routes under /auth
 };
