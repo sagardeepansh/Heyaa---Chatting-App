@@ -23,7 +23,7 @@ export default function Login() {
       localStorage.setItem('token', data.token); // Store token
       document.cookie = `token=${data.token}; path=/; Secure; HttpOnly`;
       // window.location.href = '/'; // Redirect to home or dashboard
-      router.push('/auth/friendslist'); 
+      router.push('/auth/home'); 
     } else {
       setError(data.message || 'Login failed');
     }

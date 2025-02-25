@@ -21,7 +21,7 @@ export default function Header({ messages}) {
         { name: 'Reports', href: '#', current: false },
       ]
       const userNavigation = [
-        { name: 'Your Profile', href: '#' },
+        { name: 'Your Profile', href: '/auth/profile' },
         { name: 'Settings', href: '#' },
         { name: 'Sign out', href: '/auth/login' },
       ]
@@ -39,7 +39,7 @@ export default function Header({ messages}) {
           credentials: 'same-origin', // Ensure cookies are sent along with the request
         });
 
-        console.log("response",response)
+        // console.log("response",response)
         if (response.status===200) {
           // Redirect to login page after successful logout
           window.location.href = '/auth/login';

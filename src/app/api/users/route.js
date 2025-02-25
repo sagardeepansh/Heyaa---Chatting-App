@@ -1,7 +1,12 @@
 import { ObjectId } from 'mongodb';
 import clientPromise, { databaseName } from '../../../utils/mongodb';
+import { middleware } from '../middleware';
+
 
 export async function GET(request) {
+  const authCheck = await middleware(request);
+  if (authCheck) return authCheck; 
+
     try {
       const client = await clientPromise;
       const db = client.db(databaseName); // Replace with your database name
