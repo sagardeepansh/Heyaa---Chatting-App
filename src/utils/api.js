@@ -61,7 +61,7 @@ export async function updateProfile(data) {
 
         // Extract userId from the data object
         const { userId, fullname, email, phone, profilePicture, oldPassword, newPassword } = data;
-
+        
         // Make a POST request to update the profile
         const response = await fetch('/api/users/updateProfile', {
             method: 'POST',
