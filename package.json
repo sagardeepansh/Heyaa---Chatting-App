@@ -13,6 +13,7 @@
     "@heroicons/react": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "cookie": "^1.0.2",
+    "jose": "^6.0.7",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.12.0",
     "next": "^15.1.4",

@@ -17,6 +17,7 @@ export default function FriendList() {
   const fetchUsers = async () => {
     try {
       const profiles = await getAllUsersProfiles();
+      console.log(profiles);
       setUsers(profiles?.users);
     } catch (err) {
       setError(err.message);

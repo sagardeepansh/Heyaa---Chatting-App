@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense  } from 'react';
 import { useIndexedDB } from "@/hooks/useIndexedDB";
 import ChatBox from "@/components/ChatBox";
 import Header from "@/components/Header";
@@ -9,19 +9,20 @@ import { getUserById } from '@/utils/api';
 import { useSearchParams } from 'next/navigation';
 
 
-export default function chat() {
+function ChatComponent() {
 
     const searchParams = useSearchParams();
 
     // const decoded = jwt.decode(localStorage.getItem('token'));
     const [chatMessage, setChatMessage] = useState('adsd');
     const [message, setMessage] = useState('');
+    const [friendId, setfriendId] = useState();
     const [socket, setSocket] = useState(null);
     const [decoded, setDecoded] = useState(null);
 
     // const chatId = `${decoded?._id}:12345`;
     const userId = decoded?._id;
-    const friendId = searchParams.get('userId');
+    
     // console.log("router?.query",router)
 
     const findChatId = (userId, friendId) => {
@@ -44,6 +45,11 @@ export default function chat() {
             console.log(err.message);
         }
     };
+
+    useEffect(() => {
+        const friendIde = searchParams.get('userId');
+        setfriendId(friendIde);
+    }, [searchParams]);
 
     useEffect(() => {
         fetchUsers();
@@ -216,4 +222,11 @@ export default function chat() {
 
         </>
     )
+}
+export default function Chat() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ChatComponent />
+        </Suspense>
+    );
 }

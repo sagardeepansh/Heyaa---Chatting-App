@@ -1,4 +1,4 @@
-
+"use client"
 import React, { useState, useEffect } from 'react';
 import { useIndexedDB } from "@/hooks/useIndexedDB";
 import ChatBox from "@/components/ChatBox";
@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 
 
 export default function Dashboard() {
-  const decoded = jwt.decode(localStorage.getItem('token'));
+  const [decoded, setDecoded] = useState(null);
   const [chatMessage, setChatMessage] = useState('adsd');
   const [message, setMessage] = useState('');
   const [socket, setSocket] = useState(null);
@@ -43,6 +43,15 @@ export default function Dashboard() {
   };
 
  
+   useEffect(() => {
+          if (typeof window !== 'undefined') {
+              const token = localStorage.getItem('token');
+              if (token) {
+                  const decodedToken = jwt.decode(token);
+                  setDecoded(decodedToken);
+              }
+          }
+      }, []);
   
 
   useEffect(() => {

@@ -4,7 +4,7 @@ export async function getAllUsersProfiles() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming you need to send the token for authentication
+                'Authorization': `Bearer ${localStorage.getItem('token')}`, // Send the token for authentication
             },
         });
 
@@ -13,13 +13,19 @@ export async function getAllUsersProfiles() {
         if (response.ok) {
             return data; // Return the list of user profiles
         } else {
-            throw new Error(data.message || 'Failed to fetch user profiles');
+            // Handle unauthorized or other errors
+            if (data.redirect) {
+                // If the server specifies a redirect, handle it
+                window.location.href = data.redirect; // Redirect the user
+            } else {
+                throw new Error(data.message || 'Failed to fetch user profiles');
+            }
         }
     } catch (error) {
         console.error('Error fetching user profiles:', error);
         throw error; // Re-throw the error so it can be handled by the calling function
     }
-};
+}
 export async function getUserById(userId) {
     try {
         // Check if token exists before proceeding
